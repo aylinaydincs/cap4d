@@ -9,7 +9,8 @@
 #SBATCH --error=logs/%x_%j.err
 
 # KENDİ IMAGE'IN
-#SBATCH --container-image=ghcr.io/aylinaydincs/cap4d:latest
+#SBATCH --container-image ghcr.io\#aylinaydincs/cap4d
+
 
 mkdir -p logs
 
