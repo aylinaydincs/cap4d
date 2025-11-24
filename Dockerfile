@@ -5,7 +5,7 @@
 # ```
 
 # Base image
-FROM nvidia/cuda:12.1.1-runtime-ubuntu22.04
+FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
 
 LABEL maintainer="Aylin Aydın"
 
@@ -20,17 +20,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python3 -m pip install --upgrade pip setuptools wheel
 
 RUN pip install --no-cache-dir \
-    torch==2.4.1+cu121 \
-    torchvision==0.19.1+cu121 \
-    torchaudio==2.4.1+cu121 \
-    --extra-index-url https://download.pytorch.org/whl/cu121
+        torch==2.4.1 \
+        torchvision==0.19.1 \
+        torchaudio==2.4.1 \
+        --extra-index-url https://download.pytorch.org/whl/cu121
 
-
-COPY requirements_aylin.txt /workspace/requirements.txt
-
-RUN python3 -m pip install --no-cache-dir -r /workspace/requirements.txt
 
 WORKDIR /workspace
 COPY . /workspace
 
-CMD ["bash"]
+RUN grep -Ev '^(torch==|torchvision==|torchaudio==|pytorch3d|chumpy)' \
+        requirements_aylin.txt > requirements_nocuda.txt && \
+    pip install --no-cache-dir -r requirements_nocuda.txt
+
+RUN python3 -m pip install --no-cache-dir -r /workspace/requirements.txt
+
+RUN git clone https://github.com/mattloper/chumpy.git /tmp/chumpy && \
+    pip install --no-cache-dir --no-build-isolation /tmp/chumpy && \
+    rm -rf /tmp/chumpy
+
+ENV FORCE_CUDA=1
+RUN pip install --no-build-isolation \
+    "git+https://github.com/facebookresearch/pytorch3d.git@stable"
+
+CMD ["/bin/bash"]
