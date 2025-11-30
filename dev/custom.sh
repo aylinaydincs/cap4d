@@ -24,26 +24,26 @@ echo "Working directory: $(pwd)"
 # ============================
 # ENV VARIABLES
 # ============================
-export FLAME_USERNAME=aylin.aydin@std.bogazici.edu.tr
-export FLAME_PWD=bogazici1234
-export PIXEL3DMM_PATH=$(realpath "./pixel3dmm")  # set this to where you would like to clone the Pixel3DMM repo (absolute path)
-export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute path)
+#export FLAME_USERNAME=aylin.aydin@std.bogazici.edu.tr
+#export FLAME_PWD=bogazici1234
+#export PIXEL3DMM_PATH=$(realpath "./pixel3dmm")  # set this to where you would like to clone the Pixel3DMM repo (absolute path)
+#export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute path)
 
 # ============================
 # INSTALL PIXEL3DMM
 # ============================
-bash scripts/install_pixel3dmm.sh
+#bash scripts/install_pixel3dmm.sh
 
 # ============================
 # RUN TRACKING
 # ============================
 
-mkdir -p examples/output/aylin/
+#mkdir -p examples/output/aylin/
 
 echo "--- Running reference image tracking ---"
 
 # Process a directory of (reference) images
-bash scripts/track_video_pixel3dmm.sh examples/input/aylin/images/cam0/ examples/output/aylin/reference_tracking/
+#bash scripts/track_video_pixel3dmm.sh examples/input/aylin/images/cam0/ examples/output/aylin/reference_tracking/
 
 echo "--- Running driving video tracking ---"
 # Optional: process a driving (or reference) video
