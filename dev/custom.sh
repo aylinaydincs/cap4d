@@ -26,6 +26,7 @@ echo "Working directory: $(pwd)"
 # ============================
 export FLAME_USERNAME=aylin.aydin@std.bogazici.edu.tr
 export FLAME_PWD=bogazici1234
+export PYTHONPATH=$(realpath "./"):$PYTHONPATH
 export PIXEL3DMM_PATH=$(realpath "./pixel3dmm")  # set this to where you would like to clone the Pixel3DMM repo (absolute path)
 export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute path)
 
