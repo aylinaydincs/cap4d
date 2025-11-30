@@ -32,7 +32,7 @@ export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute 
 # ============================
 # INSTALL PIXEL3DMM
 # ============================
-bash scripts/install_pixel3Dmm.sh
+bash scripts/install_pixel3dmm.sh
 
 # ============================
 # RUN TRACKING
