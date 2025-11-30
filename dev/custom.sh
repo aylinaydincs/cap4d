@@ -59,7 +59,7 @@ EOF
 # ============================
 # INSTALL PIXEL3DMM
 # ============================
-#bash scripts/install_pixel3dmm.sh
+bash scripts/install_pixel3dmm.sh
 
 # ============================
 # RUN TRACKING
