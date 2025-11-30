@@ -1,46 +1,49 @@
-# Local Usage:
-# ```
-# docker build -t ghcr.io/bouncmpe/cuda-python3 containers/cuda-python3/
-# docker run -it --rm --gpus=all ghcr.io/bouncmpe/cuda-python3
-# ```
-
-# Base image
 FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
-
 LABEL maintainer="Aylin Aydın"
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+ENV PYTHONUNBUFFERED=1
 
+# Sistem paketleri
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-dev python-is-python3 \
-    git wget curl unzip \
-    build-essential cmake ninja-build \
+        python3 python3-pip python3-dev python-is-python3 \
+        git wget curl unzip \
+        build-essential cmake ninja-build \
+        libglib2.0-0 libsm6 libxext6 libxrender1 libgl1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# pip / setuptools / wheel güncelle
 RUN python3 -m pip install --upgrade pip setuptools wheel
 
+# PyTorch + CUDA 12.1
 RUN pip install --no-cache-dir \
         torch==2.4.1 \
         torchvision==0.19.1 \
         torchaudio==2.4.1 \
         --extra-index-url https://download.pytorch.org/whl/cu121
 
-
 WORKDIR /workspace
+
+# Kodları içeri kopyala
 COPY . /workspace
 
-RUN grep -Ev '^(torch==|torchvision==|torchaudio==|pytorch3d|chumpy)' \
-        requirements_aylin.txt > requirements_nocuda.txt && \
-    pip install --no-cache-dir -r requirements_nocuda.txt
+# Python dependency'leri kur
+# (buradaki requirements_aylin.txt, senin son gönderdiğin ve
+# en altta numpy==1.26.4 + opencv-python-headless==4.9.0.80 olan dosya)
+RUN pip install --no-cache-dir -r requirements_aylin.txt
 
-RUN python3 -m pip install --no-cache-dir -r /workspace/requirements.txt
-
+# Chumpy
 RUN git clone https://github.com/mattloper/chumpy.git /tmp/chumpy && \
-    pip install --no-cache-dir --no-build-isolation /tmp/chumpy && \
+    pip install --no-build-isolation /tmp/chumpy && \
     rm -rf /tmp/chumpy
 
+# PyTorch3D: A100 (8.0), A40 (8.6), RTX40 (8.9) için derle
 ENV FORCE_CUDA=1
-RUN pip install --no-build-isolation \
+ENV TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9"
+RUN TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9" pip install --no-build-isolation \
     "git+https://github.com/facebookresearch/pytorch3d.git@stable"
 
-CMD ["/bin/bash"]
+# Projeyi import edebilmek için
+ENV PYTHONPATH=/workspace
+
+CMD ["bash"]
