@@ -4,12 +4,16 @@ LABEL maintainer="Aylin Aydın"
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PYTHONUNBUFFERED=1
 
+# gsplat CUDA extension'larının derleneceği klasör
+ENV TORCH_EXTENSIONS_DIR=/tmp/torch_extensions
+
 # Sistem paketleri
 RUN apt-get update && apt-get install -y --no-install-recommends \
         python3 python3-pip python3-dev python-is-python3 \
         git wget curl unzip \
         build-essential cmake ninja-build \
         libglib2.0-0 libsm6 libxext6 libxrender1 libgl1 \
+        ffmpeg \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # pip / setuptools / wheel güncelle
@@ -25,7 +29,8 @@ RUN pip install --no-cache-dir \
 WORKDIR /workspace
 
 # Kodları içeri kopyala
-COPY . /workspace
+#COPY . /workspace
+COPY requirements_aylin.txt .
 
 # Python dependency'leri kur
 # (buradaki requirements_aylin.txt, senin son gönderdiğin ve
@@ -43,7 +48,17 @@ ENV TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9"
 RUN TORCH_CUDA_ARCH_LIST="8.0;8.6;8.9" pip install --no-build-isolation \
     "git+https://github.com/facebookresearch/pytorch3d.git@stable"
 
-# Projeyi import edebilmek için
-ENV PYTHONPATH=/workspace
+# gsplat CUDA extension'ını build-time'da derle (GPU gerekmez, sadece CUDA toolchain lazım)
+RUN mkdir -p /tmp/torch_extensions && \
+    python3 - << 'EOF'
+import os
+os.environ["TORCH_EXTENSIONS_DIR"] = "/tmp/torch_extensions"
+import gsplat
+from gsplat.cuda import _backend
+print("Built gsplat CUDA extension at:", os.environ["TORCH_EXTENSIONS_DIR"])
+EOF
 
-CMD ["bash"]
+# Projeyi import edebilmek için
+ENV PYTHONPATH=/experiments/cap4d
+
+#CMD ["bash"]
