@@ -24,37 +24,25 @@ echo "Working directory: $(pwd)"
 # ============================
 # ENV VARIABLES
 # ============================
-export FLAME_USERNAME=aylin.aydin@std.bogazici.edu.tr
-export FLAME_PWD=bogazici1234
-export PYTHONPATH=$(realpath "./"):$PYTHONPATH
-export PIXEL3DMM_PATH=$(realpath "./pixel3dmm")  # set this to where you would like to clone the Pixel3DMM repo (absolute path)
-export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute path)
+export FLAME_USERNAME="aylin.aydin@std.bogazici.edu.tr"
+export FLAME_PWD="bogazici1234"
 
+export PIXEL3DMM_PATH="/workspace/pixel3dmm"
+export CAP4D_PATH="/workspace"
 
-
-echo "Python path before:" 
-python3 - << 'EOF'
-import sys, pprint
-pprint.pp(sys.path)
-EOF
-
-# Kap4d projesinin kökü, Pixel3DMM ve FlowFace için PYTHONPATH
+# PYTHONPATH – cap4d + pixel3dmm + flowface
 export PYTHONPATH="/workspace:/workspace/pixel3dmm:/workspace/flowface:${PYTHONPATH}"
 
-# Gerekli Python paketleri
-python3 -m pip install --no-cache-dir tyro wandb
-
-# Pixel3DMM repo'sunu paket olarak kur
-if [ -d "/workspace/pixel3dmm" ]; then
-  echo "--- Installing pixel3dmm package (editable) ---"
-  python3 -m pip install --no-cache-dir -e /workspace/pixel3dmm
-fi
-
-echo "Python path after:" 
+echo "Python path:"
 python3 - << 'EOF'
 import sys, pprint
 pprint.pp(sys.path)
 EOF
+
+# ============================
+# GEREKLİ PAKETLER
+# ============================
+python3 -m pip install --no-cache-dir tyro wandb
 
 # ============================
 # INSTALL PIXEL3DMM

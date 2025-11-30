@@ -1,19 +1,19 @@
 #!/bin/bash
 
-if [ -z "$PIXEL3DMM_PATH" ]; then
-  echo "Error: PIXEL3DMM_PATH environment is not set. Exiting."
-  exit 1
-fi
+#if [ -z "$PIXEL3DMM_PATH" ]; then
+#  echo "Error: PIXEL3DMM_PATH environment is not set. Exiting."
+#  exit 1
+#fi
 
-if [ -d "$PIXEL3DMM_PATH" ]; then
-  echo "Error: Directory at PIXEL3DMM_PATH ('$PIXEL3DMM_PATH') already exists. Exiting."
-  exit 1
-fi
+#if [ -d "$PIXEL3DMM_PATH" ]; then
+#  echo "Error: Directory at PIXEL3DMM_PATH ('$PIXEL3DMM_PATH') already exists. Exiting."
+#  exit 1
+#fi
 
-if [ -z "$CAP4D_PATH" ]; then
-  echo "Error: CAP4D_PATH environment is not set. Exiting."
-  exit 1
-fi
+#if [ -z "$CAP4D_PATH" ]; then
+#  echo "Error: CAP4D_PATH environment is not set. Exiting."
+#  exit 1
+#fi
 
 # install Pixel3DMM while making it compatible with the environment of CAP4D
 
