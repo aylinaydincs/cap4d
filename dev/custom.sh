@@ -58,11 +58,11 @@ bash scripts/install_pixel3dmm.sh
 echo "--- Running reference image tracking ---"
 
 # Process a directory of (reference) images
-#bash scripts/track_video_pixel3dmm.sh examples/input/aylin/images/cam0/ examples/output/aylin/reference_tracking/
+bash scripts/track_video_pixel3dmm.sh examples/input/aylin/images/cam0/ examples/output/aylin/reference_tracking/
 
 echo "--- Running driving video tracking ---"
 # Optional: process a driving (or reference) video
-bash scripts/track_video_pixel3dmm.sh examples/input/animation/example_video.mp4 examples/output/aylin/driving_video_tracking/
+#bash scripts/track_video_pixel3dmm.sh examples/input/animation/example_video.mp4 examples/output/aylin/driving_video_tracking/
 
 
 # ============================
