@@ -30,6 +30,38 @@ export PYTHONPATH=$(realpath "./"):$PYTHONPATH
 export PIXEL3DMM_PATH=$(realpath "./pixel3dmm")  # set this to where you would like to clone the Pixel3DMM repo (absolute path)
 export CAP4D_PATH=$(realpath "./")  # set this to the cap4d directory (absolute path)
 
+
+
+echo "Python path before:" 
+python3 - << 'EOF'
+import sys, pprint
+pprint.pp(sys.path)
+EOF
+
+# Kap4d projesinin kökü, Pixel3DMM ve FlowFace için PYTHONPATH
+export PYTHONPATH="/workspace:/workspace/pixel3dmm:/workspace/flowface:${PYTHONPATH}"
+
+# Gerekli Python paketleri
+python3 -m pip install --no-cache-dir tyro wandb
+
+# Pixel3DMM repo'sunu paket olarak kur
+if [ -d "/workspace/pixel3dmm" ]; then
+  echo "--- Installing pixel3dmm package (editable) ---"
+  python3 -m pip install --no-cache-dir -e /workspace/pixel3dmm
+fi
+
+# FlowFace repo'sunu paket olarak kur
+if [ -d "/workspace/flowface" ]; then
+  echo "--- Installing flowface package (editable) ---"
+  python3 -m pip install --no-cache-dir -e /workspace/flowface
+fi
+
+echo "Python path after:" 
+python3 - << 'EOF'
+import sys, pprint
+pprint.pp(sys.path)
+EOF
+
 # ============================
 # INSTALL PIXEL3DMM
 # ============================
