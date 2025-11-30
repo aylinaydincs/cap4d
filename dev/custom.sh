@@ -50,12 +50,6 @@ if [ -d "/workspace/pixel3dmm" ]; then
   python3 -m pip install --no-cache-dir -e /workspace/pixel3dmm
 fi
 
-# FlowFace repo'sunu paket olarak kur
-if [ -d "/workspace/flowface" ]; then
-  echo "--- Installing flowface package (editable) ---"
-  python3 -m pip install --no-cache-dir -e /workspace/flowface
-fi
-
 echo "Python path after:" 
 python3 - << 'EOF'
 import sys, pprint
