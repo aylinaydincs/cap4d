@@ -20,6 +20,8 @@ echo ""
 cd /workspace
 echo "Working directory: $(pwd)"
 
+export PYTHONPATH=$(realpath "./"):$PYTHONPATH
+
 echo "--- Running generate_felix.sh ---"
 bash scripts/generate_felix.sh
 
