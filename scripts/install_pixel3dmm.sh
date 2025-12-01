@@ -60,6 +60,7 @@ cp ../replacement_code/install_mica_download_flame.sh install.sh
 cp ../replacement_code/mica_demo.py demo.py
 cp ../replacement_code/mica.py micalib/models/mica.py
 sed -i 's/np\.Inf/np.inf/g' datasets/creation/util.py  # correct numpy version issue
+chmod +x install.sh
 printf "$FLAME_USERNAME\n$FLAME_PWD\n" | ./install.sh
 # fix installation
 mv data/FLAME2020/FLAME2020/* data/FLAME2020/
