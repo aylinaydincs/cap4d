@@ -5,7 +5,7 @@ mkdir examples/output
 
 # Test MMDM installation by generating a few images
 python cap4d/inference/generate_images.py \
-    --config_path configs/generation/medium_quality.yaml \
+    --config_path configs/generation/high_quality.yaml \
     --reference_data_path examples/input/aylin/ \
     --output_path examples/output/aylin/
 
