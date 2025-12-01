@@ -3,7 +3,7 @@
 #SBATCH --output=logs/felix-%j.out
 #SBATCH --error=logs/felix-%j.err
 
-#SBATCH --container-image=ghcr.io#aylinaydincs/cap4d:latest
+#SBATCH --container-image=ghcr.io\#aylinaydincs/cap4d:latest
 #SBATCH --container-mounts /users/aylin.aydin/experiments/cap4d:/workspace
 #SBATCH --gpus=1
 #SBATCH --cpus-per-gpu=4
