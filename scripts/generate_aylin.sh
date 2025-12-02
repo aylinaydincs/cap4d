@@ -20,6 +20,6 @@ python gaussianavatars/animate.py \
     --model_path examples/output/aylin/avatar/ \
     --target_animation_path examples/input/animation/sequence_01/fit.npz \
     --target_cam_trajectory_path examples/input/animation/sequence_01/orbit.npz  \
-    --output_path examples/output/felix/animation_01/ \
+    --output_path examples/output/aylin/animation_01/ \
     --export_ply 1 \
     --compress_ply 0
