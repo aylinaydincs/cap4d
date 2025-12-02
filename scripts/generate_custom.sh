@@ -66,7 +66,7 @@ log_step "MMDM image generation" \
 # 2) GaussianAvatar training
 log_step "GaussianAvatar training" \
     python gaussianavatars/train.py \
-        --config_path configs/avatar/default.yaml \
+        --config_path configs/avatar/high_quality.yaml \
         --source_paths examples/output/"$USER_NAME"/reference_images/ examples/output/"$USER_NAME"/generated_images/ \
         --model_path examples/output/"$USER_NAME"/avatar/
 
