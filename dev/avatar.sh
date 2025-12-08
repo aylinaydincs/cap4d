@@ -1,4 +1,5 @@
 #!/bin/bash
+#SBATCH --job-name=avatar
 #SBATCH --output=logs/%x-%j.out
 #SBATCH --error=logs/%x-%j.err
 
@@ -11,26 +12,53 @@
 
 set -e
 
-# ===== PARAMETER CHECK =====
+########################################
+# Argument parsing with defaults
+########################################
+
 if [ -z "$1" ]; then
-    echo "Usage: sbatch run_custom.sbatch <user_name>"
+    echo "Usage: sbatch avatar.sh <user_name> [gen_config] [avatar_config] [anim_sequence]"
+    echo ""
+    echo "  <user_name>     : zorunlu (ör: aylin)"
+    echo "  [gen_config]    : opsiyonel, varsayılan: configs/generation/high_quality.yaml"
+    echo "  [avatar_config] : opsiyonel, varsayılan: configs/avatar/high_quality.yaml"
+    echo "  [anim_sequence] : opsiyonel, varsayılan: sequence_01"
     exit 1
 fi
 
-USER_NAME=$1
+USER_NAME="$1"
+GEN_CONFIG="${2:-configs/generation/high_quality.yaml}"
+AVATAR_CONFIG="${3:-configs/avatar/high_quality.yaml}"
+ANIM_SEQUENCE="${4:-sequence_01}"
+
+########################################
+# Job header
+########################################
 
 echo "===== Starting Job $SLURM_JOB_ID for USER: $USER_NAME ====="
 echo "Running on: $(hostname)"
-nvidia-smi
+echo "GEN_CONFIG      : $GEN_CONFIG"
+echo "AVATAR_CONFIG   : $AVATAR_CONFIG"
+echo "ANIM_SEQUENCE   : $ANIM_SEQUENCE"
 echo ""
+
+nvidia-smi || echo "nvidia-smi not available inside container"
+echo ""
+
+########################################
+# Environment setup
+########################################
 
 cd /workspace
 echo "Working directory: $(pwd)"
 
-export PYTHONPATH=$(realpath "./"):$PYTHONPATH
+export PYTHONPATH="$(realpath "./"):${PYTHONPATH}"
+
+########################################
+# Run pipeline
+########################################
 
 echo "--- Running generate_custom.sh for USER: $USER_NAME ---"
-bash scripts/generate_custom.sh "$USER_NAME"
+bash scripts/generate_custom.sh "$USER_NAME" "$GEN_CONFIG" "$AVATAR_CONFIG" "$ANIM_SEQUENCE"
 
-echo "===== Job Finished Successfully ====="
-
+echo "===== Job Finished Successfully for USER: $USER_NAME ====="
