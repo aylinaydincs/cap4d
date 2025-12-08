@@ -2,13 +2,38 @@
 set -e
 
 if [ -z "$1" ]; then
-    echo "Usage: bash generate_custom.sh <user_name>"
+    echo "Usage: bash generate_custom.sh <user_name> [gen_config] [avatar_config] [anim_sequence]"
+    echo ""
+    echo "  <user_name>     : zorunlu (ör: aylin)"
+    echo "  [gen_config]    : opsiyonel, varsayılan: configs/generation/high_quality.yaml"
+    echo "  [avatar_config] : opsiyonel, varsayılan: configs/avatar/high_quality.yaml"
+    echo "  [anim_sequence] : opsiyonel, varsayılan: sequence_01"
     exit 1
 fi
 
-USER_NAME=$1
+USER_NAME="$1"
+GEN_CONFIG="${2:-configs/generation/high_quality.yaml}"
+AVATAR_CONFIG="${3:-configs/avatar/high_quality.yaml}"
+ANIM_SEQUENCE="${4:-sequence_01}"
+
+# Config isimlerinden kısa tag çıkar
+GEN_TAG="$(basename "$GEN_CONFIG" .yaml)"
+AVATAR_TAG="$(basename "$AVATAR_CONFIG" .yaml)"
+
+# Tüm run için uniq output id
+RUN_ID="${USER_NAME}__${GEN_TAG}__${AVATAR_TAG}__${ANIM_SEQUENCE}"
+
+# Ana output klasörü
+OUT_ROOT="examples/output/${RUN_ID}"
 
 echo "=== Running generate_custom.sh for user: $USER_NAME ==="
+echo "    GEN_CONFIG      : $GEN_CONFIG"
+echo "    AVATAR_CONFIG   : $AVATAR_CONFIG"
+echo "    ANIM_SEQUENCE   : $ANIM_SEQUENCE"
+echo "    RUN_ID          : $RUN_ID"
+echo "    OUT_ROOT        : $OUT_ROOT"
+
+mkdir -p "$OUT_ROOT"
 
 # ---------------------------
 # Timing helpers
@@ -26,12 +51,14 @@ log_step() {
 
     echo ""
     echo ">>> [STEP START] $STEP_NAME"
-    local START_TS=$(date +%s)
+    local START_TS
+    START_TS=$(date +%s)
 
     # Run the actual command
     "$@"
 
-    local END_TS=$(date +%s)
+    local END_TS
+    END_TS=$(date +%s)
     local DURATION=$((END_TS - START_TS))
 
     STEP_NAMES+=("$STEP_NAME")
@@ -59,24 +86,24 @@ format_duration() {
 # 1) MMDM image generation
 log_step "MMDM image generation" \
     python cap4d/inference/generate_images.py \
-        --config_path configs/generation/high_quality.yaml \
-        --reference_data_path examples/input/"$USER_NAME"/ \
-        --output_path examples/output/"$USER_NAME"/
+        --config_path "$GEN_CONFIG" \
+        --reference_data_path "examples/input/${USER_NAME}/" \
+        --output_path "${OUT_ROOT}/"
 
 # 2) GaussianAvatar training
 log_step "GaussianAvatar training" \
     python gaussianavatars/train.py \
-        --config_path configs/avatar/high_quality.yaml \
-        --source_paths examples/output/"$USER_NAME"/reference_images/ examples/output/"$USER_NAME"/generated_images/ \
-        --model_path examples/output/"$USER_NAME"/avatar/
+        --config_path "$AVATAR_CONFIG" \
+        --source_paths "${OUT_ROOT}/reference_images/" "${OUT_ROOT}/generated_images/" \
+        --model_path "${OUT_ROOT}/avatar/"
 
 # 3) Animation render + export
 log_step "Animation render + export" \
     python gaussianavatars/animate.py \
-        --model_path examples/output/"$USER_NAME"/avatar/ \
-        --target_animation_path examples/input/animation/sequence_01/fit.npz \
-        --target_cam_trajectory_path examples/input/animation/sequence_01/orbit.npz \
-        --output_path examples/output/"$USER_NAME"/animation_01/ \
+        --model_path "${OUT_ROOT}/avatar/" \
+        --target_animation_path "examples/input/animation/${ANIM_SEQUENCE}/fit.npz" \
+        --target_cam_trajectory_path "examples/input/animation/${ANIM_SEQUENCE}/orbit.npz" \
+        --output_path "${OUT_ROOT}/animation_${ANIM_SEQUENCE}/" \
         --export_ply 1 \
         --compress_ply 0
 
@@ -97,5 +124,7 @@ done
 
 echo "--------------------------------------------------------"
 echo " Total pipeline time       : $(format_duration "$TOTAL_DURATION")"
+echo " Run ID                    : $RUN_ID"
+echo " Output root               : $OUT_ROOT"
 echo "========================================================"
 echo ""
