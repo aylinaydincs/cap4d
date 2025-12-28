@@ -32,7 +32,7 @@ OUT_ROOT="examples/output/${RUN_NAME}"
 REF_DIR="${OUT_ROOT}/reference_images/"
 GEN_DIR="${OUT_ROOT}/generated_images/"
 AVATAR_DIR="${OUT_ROOT}/avatar"
-ANIM_DIR="${OUT_ROOT}/animation_${ANIM_SEQUENCE}"
+ANIM_DIR="${OUT_ROOT}_${AVATAR_TAG}/animation_${ANIM_SEQUENCE}"
 
 # =========================================================
 # Info
