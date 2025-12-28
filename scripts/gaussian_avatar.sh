@@ -48,37 +48,6 @@ echo " REF_DIR         : $REF_DIR"
 echo " GEN_DIR         : $GEN_DIR"
 echo "========================================================="
 
-# =========================================================
-# Sanity checks
-# =========================================================
-if [ ! -d "$REF_DIR" ]; then
-    echo "❌ Missing reference_images directory:"
-    echo "   $REF_DIR"
-    exit 1
-fi
-
-if [ ! -d "$GEN_DIR" ]; then
-    echo "❌ Missing generated_images directory:"
-    echo "   $GEN_DIR"
-    exit 1
-fi
-
-REF_COUNT=$(ls "$REF_DIR" | wc -l)
-GEN_COUNT=$(ls "$GEN_DIR" | wc -l)
-
-if [ "$REF_COUNT" -lt 1 ]; then
-    echo "❌ reference_images is empty"
-    exit 1
-fi
-
-if [ "$GEN_COUNT" -lt 10 ]; then
-    echo "❌ generated_images too few ($GEN_COUNT)"
-    exit 1
-fi
-
-echo "✔ reference_images : $REF_COUNT"
-echo "✔ generated_images : $GEN_COUNT"
-
 mkdir -p "$AVATAR_DIR" "$ANIM_DIR"
 
 # =========================================================
