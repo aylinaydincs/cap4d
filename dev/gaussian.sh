@@ -59,29 +59,6 @@ echo "Working directory: $(pwd)"
 export PYTHONPATH="$(realpath "./"):${PYTHONPATH}"
 
 ########################################
-# Sanity checks
-########################################
-
-OUT_ROOT="examples/output/${RUN_NAME}"
-REF_DIR="${OUT_ROOT}/reference_images"
-GEN_DIR="${OUT_ROOT}/generated_images"
-
-if [ ! -d "$REF_DIR" ]; then
-    echo "❌ Missing reference_images:"
-    echo "   $REF_DIR"
-    exit 1
-fi
-
-if [ ! -d "$GEN_DIR" ]; then
-    echo "❌ Missing generated_images:"
-    echo "   $GEN_DIR"
-    exit 1
-fi
-
-echo "✔ Found reference_images and generated_images"
-echo ""
-
-########################################
 # Run GaussianAvatar training + animation
 ########################################
 
