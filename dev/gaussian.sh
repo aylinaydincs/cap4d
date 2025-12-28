@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=gaussianavatar
+#SBATCH --job-name=gaussian
 #SBATCH --output=logs/%x-%j.out
 #SBATCH --error=logs/%x-%j.err
 
-#SBATCH --container-image=ghcr.io#aylinaydincs/cap4d:latest
+#SBATCH --container-image=ghcr.io\#aylinaydincs/cap4d:latest
 #SBATCH --container-mounts /users/aylin.aydin/experiments/cap4d:/workspace
 #SBATCH --gpus=1
 #SBATCH --cpus-per-gpu=4
