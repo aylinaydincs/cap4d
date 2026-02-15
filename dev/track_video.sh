@@ -20,6 +20,8 @@ cd /workspace
 echo "Working directory: $(pwd)"
 
 export PYTHONPATH="$(realpath "./"):${PYTHONPATH}"
+export CAP4D_PATH=/workspace
+export PIXEL3DMM_PATH=/workspace/pixel3dmm
 
 # -----------------------
 # PATHS
