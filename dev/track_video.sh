@@ -25,7 +25,24 @@ export PIXEL3DMM_PATH=/workspace/pixel3dmm
 
 echo "Installing pixel3dmm deps..."
 pip install -q tyro wandb face-alignment environs mediapy git+https://github.com/Ahmednull/L2CS-Net.git
+pip install \
+  onnxruntime \
+  tensorboard \
+  distinctipy \
+  environs \
+  mediapy \
+  tyro \
+  wandb \
+  face-alignment \
+  insightface
 pip install -e pixel3dmm
+
+cd pixel3dmm/src/pixel3dmm/preprocessing/PIPNet/FaceBoxesV2/utils/nms
+python setup.py build_ext --inplace
+cd /workspace
+
+pip install -e pixel3dmm --no-build-isolation
+
 
 # -----------------------
 # PATHS
