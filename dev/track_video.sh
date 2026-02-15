@@ -24,7 +24,7 @@ export CAP4D_PATH=/workspace
 export PIXEL3DMM_PATH=/workspace/pixel3dmm
 
 echo "Installing pixel3dmm deps..."
-pip install -q tyro wandb face-alignment
+pip install -q tyro wandb face-alignment environs mediapy git+https://github.com/Ahmednull/L2CS-Net.git
 pip install -e pixel3dmm
 
 # -----------------------
