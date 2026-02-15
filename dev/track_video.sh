@@ -26,50 +26,17 @@ export PIXEL3DMM_PATH=/workspace/pixel3dmm
 echo "Installing pixel3dmm deps..."
 ppython -m pip install --upgrade pip
 
-# --------------------------------------------------
-# INSTALL ENVIRONMENT.YML PACKAGES VIA PIP
-# --------------------------------------------------
-pip install \
-    numpy \
-    scipy \
-    opencv-python \
-    imageio \
-    matplotlib \
-    tqdm \
-    scikit-image \
-    pyyaml \
-    loguru \
-    mediapy \
-    onnxruntime \
-    insightface \
-    tensorboard \
-    distinctipy \
-    pyvista \
-    face-alignment \
-    tyro \
-    wandb \
-    environs
-
-# --------------------------------------------------
-# L2CS (eye tracking dependency)
-# --------------------------------------------------
-pip install git+https://github.com/Ahmednull/L2CS-Net.git
-
-# --------------------------------------------------
-# BUILD FACEBOXES (CRITICAL)
-# --------------------------------------------------
-cd pixel3dmm/src/pixel3dmm/preprocessing/PIPNet/FaceBoxesV2/utils/nms
-
-python setup.py build_ext --inplace
-
 cd /workspace
 
-pip install git+https://github.com/facebookresearch/pytorch3d.git@stable
-pip install git+https://github.com/NVlabs/nvdiffrast.git
+export PYTHONPATH=/workspace/pixel3dmm/src:$PYTHONPATH
 
-pip instal -e .
+python -m pip install --upgrade pip
 
-./install_preprocessing_pipeline.sh
+pip install -r clean_requirements.txt
+
+# native extension (still needed)
+cd pixel3dmm/src/pixel3dmm/preprocessing/PIPNet/FaceBoxesV2/utils/nms
+python setup.py build_ext --inplace
 
 
 # -----------------------
